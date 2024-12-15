@@ -1,45 +1,36 @@
-document.getElementById('loginForm').addEventListener('submit', function(event) {
-    event.preventDefault();
-
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
 
-    const csrfToken = getCookie('XSRF-TOKEN');
-
-    fetch('/api/auth/login', {
+    const loginResponse = await fetch('/api/auth/login', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
-            'X-XSRF-TOKEN': csrfToken
+            'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ email: email, password: password })
-    })
-    .then(response => {
-        if (response.ok) {
-            window.location.href = '/dashboard.html'; // Redirect to dashboard or home
-        } else {
-            return response.json();
-        }
-    })
-    .then(data => {
-        if (data.error) {
-            document.getElementById('error-message').innerText = data.error;
-        }
-    })
-    .catch(error => console.error('Error:', error));
-});
+        body: JSON.stringify({ email, password }),
+        credentials: 'include' // Include cookies
+    });
 
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
+    if (loginResponse.ok) {
+        // Fetch current user to get role
+        const userResponse = await fetch('/api/auth/user', {
+            method: 'GET',
+            credentials: 'include' // Include cookies
+        });
+        const user = await userResponse.json();
+        if (user && user.role) {
+            if (user.role === 'CLIENT') {
+                window.location.href = 'client_dashboard.html';
+            } else if (user.role === 'MECHANIC') {
+                window.location.href = 'mechanic_dashboard.html';
             }
+        } else {
+            alert('User not found.');
+            window.location.href = 'login.html';
         }
+    } else {
+        const message = await loginResponse.text();
+        document.getElementById('message').innerText = message;
     }
-    return cookieValue;
-}
+});

@@ -1,5 +1,6 @@
 package org.autoservice.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.autoservice.dto.LoginRequest;
 import org.autoservice.dto.RegistrationRequest;
 import org.autoservice.model.User;
@@ -8,10 +9,7 @@ import org.autoservice.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -54,6 +52,24 @@ public class UserController {
         SessionManager.createSession(sessionId, existingUser);
 
         return ResponseEntity.ok("Login successful!");
+    }
+
+    @GetMapping("/user")
+    public User getCurrentUser(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        String sessionId = null;
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("sessionId".equals(cookie.getName())) {
+                    sessionId = cookie.getValue();
+                    break;
+                }
+            }
+        }
+        if (sessionId != null) {
+            return SessionManager.getUserFromSession(sessionId);
+        }
+        return null;
     }
 
     private String generateSessionId() {

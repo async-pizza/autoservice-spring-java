@@ -31,3 +31,19 @@ CREATE TABLE orders (
     FOREIGN KEY (mechanic_id) REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
     FOREIGN KEY (car_id) REFERENCES cars(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+CREATE TABLE services (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
+    cost DECIMAL(10, 2) NOT NULL
+);
+
+CREATE TABLE order_services (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT NOT NULL,
+    service_id INT NOT NULL,
+    quantity INT NOT NULL,
+    FOREIGN KEY (order_id) REFERENCES orders(id),
+    FOREIGN KEY (service_id) REFERENCES services(id)
+);
