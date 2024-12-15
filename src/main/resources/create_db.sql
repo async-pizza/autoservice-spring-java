@@ -8,3 +8,26 @@ CREATE TABLE users (
     password VARCHAR(255) NOT NULL,
     role ENUM('CLIENT', 'MECHANIC') NOT NULL
 );
+
+CREATE TABLE cars (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    brand VARCHAR(50) NOT NULL,
+    model VARCHAR(50) NOT NULL,
+    year INT NOT NULL,
+    license_plate VARCHAR(15) NOT NULL UNIQUE,
+    owner_id INT NOT NULL,
+    FOREIGN KEY (owner_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE orders (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    status ENUM('IN_PROGRESS', 'COMPLETED', 'CANCELLED') NOT NULL,
+    creation_date DATETIME NOT NULL,
+    completion_date DATETIME,
+    client_id INT NOT NULL,
+    mechanic_id INT,
+    car_id INT NOT NULL,
+    FOREIGN KEY (client_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (mechanic_id) REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
+    FOREIGN KEY (car_id) REFERENCES cars(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
