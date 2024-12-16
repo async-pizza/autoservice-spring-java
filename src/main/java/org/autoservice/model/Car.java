@@ -12,18 +12,21 @@ public class Car {
     private String model;
     private int year;
     private String licensePlate;
-    private Long ownerId;
+
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
+    private User owner;
 
     public Car() {
     }
 
-    public Car(Long id, String brand, String model, int year, String licensePlate, Long ownerId) {
+    public Car(Long id, String brand, String model, int year, String licensePlate, User owner) {
         this.id = id;
         this.brand = brand;
         this.model = model;
         this.year = year;
         this.licensePlate = licensePlate;
-        this.ownerId = ownerId;
+        this.owner = owner;
     }
 
     public Long getId() {
@@ -66,11 +69,11 @@ public class Car {
         this.licensePlate = licensePlate;
     }
 
-    public Long getOwnerId() {
-        return ownerId;
+    public User getOwner() {
+        return owner;
     }
 
-    public void setOwnerId(Long ownerId) {
-        this.ownerId = ownerId;
+    public void setOwner(User owner) {
+        this.owner = owner;
     }
 }
