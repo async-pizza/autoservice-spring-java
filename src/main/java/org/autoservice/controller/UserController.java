@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/auth")
 public class UserController {
@@ -70,6 +72,12 @@ public class UserController {
             return SessionManager.getUserFromSession(sessionId);
         }
         return null;
+    }
+
+    @GetMapping("/users")
+    public ResponseEntity<List<User>> getUsersByRole(@RequestParam String role) {
+        List<User> users = userService.findByRole(role);
+        return ResponseEntity.ok(users);
     }
 
     private String generateSessionId() {

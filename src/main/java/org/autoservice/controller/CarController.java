@@ -30,7 +30,6 @@ public class CarController {
     @PostMapping
     public ResponseEntity<String> createCar(@RequestBody CarRequest carRequest, HttpServletRequest request, HttpServletResponse response) {
         User user = getUserFromSession(request);
-        System.out.println(user.toString());
         Car car = new Car(null, carRequest.brand(), carRequest.model(), carRequest.year(), carRequest.licensePlate(), user);
         carService.createCar(car);
         return ResponseEntity.ok("Car created successfully!");

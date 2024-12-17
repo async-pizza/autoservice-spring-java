@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/services")
 public class ServiceController {
@@ -26,5 +28,11 @@ public class ServiceController {
         service.setCost(serviceRequest.cost());
         serviceService.createService(service);
         return ResponseEntity.ok("Service created successfully!");
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Service>> getAllServices() {
+        List<Service> services = serviceService.getAllServices();
+        return ResponseEntity.ok(services);
     }
 }

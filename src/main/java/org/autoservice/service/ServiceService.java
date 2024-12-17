@@ -4,6 +4,8 @@ import org.autoservice.model.Service;
 import org.autoservice.repository.ServiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
+
 @org.springframework.stereotype.Service
 public class ServiceService {
 
@@ -16,5 +18,9 @@ public class ServiceService {
 
     public Service getServiceById(Long id) {
         return serviceRepository.findById(id).orElse(null);
+    }
+
+    public List<Service> getAllServices() {
+        return serviceRepository.findAll();
     }
 }

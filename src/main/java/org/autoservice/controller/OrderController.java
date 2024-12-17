@@ -2,19 +2,21 @@ package org.autoservice.controller;
 
 import jakarta.servlet.http.Cookie;
 import org.autoservice.dto.OrderRequest;
+import org.autoservice.dto.OrderServiceRequest;
 import org.autoservice.model.Car;
 import org.autoservice.model.Order;
+import org.autoservice.model.Service;
 import org.autoservice.model.User;
 import org.autoservice.security.SessionManager;
-import org.autoservice.service.OrderService;
-import org.autoservice.service.UserService;
-import org.autoservice.service.CarService;
+import org.autoservice.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpServletRequest;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/orders")
@@ -29,23 +31,59 @@ public class OrderController {
     @Autowired
     private CarService carService;
 
+    @Autowired
+    private ServiceService serviceService;
+
+    @Autowired
+    private OrderServiceService orderServiceService;
+
     @PostMapping
     public ResponseEntity<String> createOrder(@RequestBody OrderRequest orderRequest, HttpServletRequest request) {
-        User mechanic = userService.findById(orderRequest.mechanicId());
-        if (mechanic == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Mechanic not found");
+        User client = getUserFromSession(request);
+        if (client == null || !client.getRole().equals("CLIENT")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized to create orders");
         }
+
         Car car = carService.findById(orderRequest.carId());
         if (car == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Car not found");
         }
+
+        User mechanic = userService.findById(orderRequest.mechanicId());
+        if (mechanic == null || !mechanic.getRole().equals("MECHANIC")) {
+            return ResponseEntity.badRequest().body("Invalid mechanic selection");
+        }
+
         Order order = new Order();
-        order.setClient(getUserFromSession(request));
+        order.setClient(client);
         order.setMechanic(mechanic);
         order.setCar(car);
         order.setStatus(orderRequest.status());
         orderService.createOrder(order);
-        return ResponseEntity.ok("Order created successfully!");
+
+        for (OrderServiceRequest serviceRequest : orderRequest.services()) {
+            Service service = serviceService.getServiceById(serviceRequest.serviceId());
+            if (service == null) {
+                continue;
+            }
+            org.autoservice.model.OrderService orderServiceEntity = new org.autoservice.model.OrderService();
+            orderServiceEntity.setOrder(order);
+            orderServiceEntity.setService(service);
+            orderServiceEntity.setQuantity(serviceRequest.quantity());
+            orderServiceService.createOrderService(orderServiceEntity);
+        }
+
+        return ResponseEntity.ok("Order created successfully with services!");
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Order>> getOrders(HttpServletRequest request) {
+        User user = getUserFromSession(request);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+        List<Order> orders = orderService.getOrdersByUser(user.getId(), user.getRole());
+        return ResponseEntity.ok(orders);
     }
 
     @GetMapping("/{id}")
