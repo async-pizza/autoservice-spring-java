@@ -3,6 +3,7 @@ package org.autoservice.controller;
 import jakarta.servlet.http.Cookie;
 import org.autoservice.dto.OrderRequest;
 import org.autoservice.dto.OrderServiceRequest;
+import org.autoservice.dto.OrderUpdateRequest;
 import org.autoservice.model.Car;
 import org.autoservice.model.Order;
 import org.autoservice.model.Service;
@@ -88,13 +89,26 @@ public class OrderController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Order> getOrder(@PathVariable Long id, HttpServletRequest request) {
-        // Authenticate user
         Order order = orderService.getOrderById(id);
         if (order != null) {
             return ResponseEntity.ok(order);
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateOrder(@PathVariable Long id, @RequestBody OrderUpdateRequest orderUpdateRequest,
+                                              HttpServletRequest request) {
+        Order order = orderService.getOrderById(id);
+        if (order == null) {
+            return ResponseEntity.notFound().build();
+        }
+        // Update the order
+        order.setStatus(orderUpdateRequest.status());
+        order.setCompletionDate(orderUpdateRequest.completionDate());
+        orderService.updateOrder(order);
+        return ResponseEntity.ok("Order updated successfully.");
     }
 
     private User getUserFromSession(HttpServletRequest request) {

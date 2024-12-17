@@ -33,4 +33,8 @@ public class OrderService {
     public Order getOrderById(Long orderId) {
         return orderRepository.findById(orderId).orElse(null);
     }
+
+    public void updateOrder(Order order) {
+        orderRepository.save(order);
+    }
 }

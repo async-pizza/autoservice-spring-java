@@ -2,6 +2,7 @@ package org.autoservice.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -33,7 +34,7 @@ public class Order {
     private Car car;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<OrderService> services;
+    private List<OrderService> services;
 
     public enum Status {
         IN_PROGRESS, COMPLETED, CANCELLED
@@ -41,6 +42,10 @@ public class Order {
 
     public void setCreationDate(LocalDateTime now) {
         this.creationDate = now;
+    }
+
+    public Long getId() {
+        return id;
     }
 
 
