@@ -48,6 +48,9 @@ public class Order {
         return id;
     }
 
+    public List<OrderService> getServices() {
+        return services;
+    }
 
     public Status getStatus() {
         return status;
@@ -57,7 +60,6 @@ public class Order {
         this.status = status;
     }
 
-    // Getter for creationDate
     public LocalDateTime getCreationDate() {
         return creationDate;
     }

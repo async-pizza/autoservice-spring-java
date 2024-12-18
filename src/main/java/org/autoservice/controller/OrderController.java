@@ -91,6 +91,7 @@ public class OrderController {
     public ResponseEntity<Order> getOrder(@PathVariable Long id, HttpServletRequest request) {
         Order order = orderService.getOrderById(id);
         if (order != null) {
+            System.out.println(order.getServices());
             return ResponseEntity.ok(order);
         } else {
             return ResponseEntity.notFound().build();
