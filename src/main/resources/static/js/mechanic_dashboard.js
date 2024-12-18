@@ -33,7 +33,7 @@ async function fetchAndDisplayOrders() {
                     <p>Car: ${order.car.brand} ${order.car.model}</p>
                     <h4>Services:</h4>
                         <ul>
-                        ${order.services.map(service => `<li>${service.name} x${service.quantity}</li>`).join('')}
+                        ${order.services.map(service => `<li>${service.service.name} x${service.quantity}</li>`).join('')}
                         </ul>
                     <button onclick="openUpdateModal(${order.id})">Update Order</button>
                 `;

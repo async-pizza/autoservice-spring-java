@@ -72,6 +72,10 @@ async function fetchAndDisplayOrders() {
                     <p>Created: ${order.creationDate}</p>
                     <p>Completed: ${order.completionDate || 'N/A'}</p>
                     <p>Car: ${order.car.brand} ${order.car.model}</p>
+                    <h4>Services:</h4>
+                        <ul>
+                        ${order.services.map(service => `<li>${service.service.name} x${service.quantity}</li>`).join('')}
+                        </ul>
                 `;
                 ordersContainer.appendChild(orderCard);
             });

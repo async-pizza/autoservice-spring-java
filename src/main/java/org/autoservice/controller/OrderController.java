@@ -91,7 +91,6 @@ public class OrderController {
     public ResponseEntity<Order> getOrder(@PathVariable Long id, HttpServletRequest request) {
         Order order = orderService.getOrderById(id);
         if (order != null) {
-            System.out.println(order.getServices());
             return ResponseEntity.ok(order);
         } else {
             return ResponseEntity.notFound().build();
@@ -105,7 +104,6 @@ public class OrderController {
         if (order == null) {
             return ResponseEntity.notFound().build();
         }
-        // Update the order
         order.setStatus(orderUpdateRequest.status());
         order.setCompletionDate(orderUpdateRequest.completionDate());
         orderService.updateOrder(order);
