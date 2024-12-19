@@ -6,48 +6,50 @@
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-<h2>Welcome, Client!</h2>
+<header>
+    <h1>Auto Service</h1>
+</header>
+<div class="container">
+    <h2>Welcome, Client!</h2>
+    <div class="tab">
+        <button class="tablinks" onclick="openTab(event, 'Cars')">Cars</button>
+        <button class="tablinks" onclick="openTab(event, 'Orders')">Orders</button>
+    </div>
 
-<!-- Tabs -->
-<div class="tab">
-    <button class="tablinks" onclick="openTab(event, 'Cars')">Cars</button>
-    <button class="tablinks" onclick="openTab(event, 'Orders')">Orders</button>
+    <!-- Tab content for Cars -->
+    <div id="Cars" class="tabcontent">
+        <h3>Add New Car</h3>
+        <form id="addCarForm">
+            <input type="text" id="brand" placeholder="Brand" required>
+            <input type="text" id="model" placeholder="Model" required>
+            <input type="number" id="year" placeholder="Year" required>
+            <input type="text" id="licensePlate" placeholder="License Plate" required>
+            <button type="submit">Add Car</button>
+        </form>
+        <div id="carsContainer"></div>
+    </div>
+
+    <!-- Tab content for Orders -->
+    <div id="Orders" class="tabcontent" style="display:none;">
+        <h3>Create New Order</h3>
+        <form id="createOrderForm">
+            <select id="carSelect" required>
+                <option value="">Select Car</option>
+            </select>
+            <select id="mechanicSelect" required>
+                <option value="">Select Mechanic</option>
+            </select>
+            <select id="serviceSelect">
+                <option value="">Select Service</option>
+            </select>
+            <input type="number" id="quantityInput" min="1">
+            <button type="button" onclick="addService()">Add Service</button>
+            <ul id="servicesList"></ul>
+            <button type="submit">Submit Order</button>
+        </form>
+        <div id="ordersContainer"></div>
+    </div>
 </div>
-
-<!-- Tab content for Cars -->
-<div id="Cars" class="tabcontent">
-    <h3>Add New Car</h3>
-    <form id="addCarForm">
-        <input type="text" id="brand" placeholder="Brand" required>
-        <input type="text" id="model" placeholder="Model" required>
-        <input type="number" id="year" placeholder="Year" required>
-        <input type="text" id="licensePlate" placeholder="License Plate" required>
-        <button type="submit">Add Car</button>
-    </form>
-    <div id="carsContainer"></div>
-</div>
-
-<!-- Tab content for Orders -->
-<div id="Orders" class="tabcontent" style="display:none;">
-    <h3>Create New Order</h3>
-    <form id="createOrderForm">
-        <select id="carSelect" required>
-            <option value="">Select Car</option>
-        </select>
-        <select id="mechanicSelect" required>
-            <option value="">Select Mechanic</option>
-        </select>
-        <select id="serviceSelect">
-            <option value="">Select Service</option>
-        </select>
-        <input type="number" id="quantityInput" min="1">
-        <button type="button" onclick="addService()">Add Service</button>
-        <ul id="servicesList"></ul>
-        <button type="submit">Submit Order</button>
-    </form>
-    <div id="ordersContainer"></div>
-</div>
-
 <script src="js/client_dashboard.js"></script>
 </body>
 </html>

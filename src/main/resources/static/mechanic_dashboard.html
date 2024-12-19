@@ -6,45 +6,47 @@
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-<h2>Welcome, Mechanic!</h2>
+<header>
+    <h1>Auto Service</h1>
+</header>
+<div class="container">
+    <h2>Welcome, Mechanic!</h2>
+    <div class="tab">
+        <button class="tablinks" onclick="openTab(event, 'Orders')">Orders</button>
+        <button class="tablinks" onclick="openTab(event, 'Services')">Services</button>
+    </div>
 
-<!-- Navigation tabs -->
-<div class="tab">
-    <button class="tablinks" onclick="openTab(event, 'Orders')">Orders</button>
-    <button class="tablinks" onclick="openTab(event, 'Services')">Services</button>
+    <!-- Tab content for Orders -->
+    <div id="Orders" class="tabcontent">
+        <h3>Your Orders</h3>
+        <div id="ordersContainer"></div>
+    </div>
+
+    <!-- Tab content for Services -->
+    <div id="Services" class="tabcontent" style="display:none;">
+        <h3>Available Services</h3>
+        <form id="addServiceForm">
+            <input type="text" id="serviceName" placeholder="Service Name" required>
+            <input type="text" id="serviceDescription" placeholder="Service Description" required>
+            <input type="number" id="serviceCost" step="0.01" placeholder="Service Cost" required>
+            <button type="submit">Add Service</button>
+        </form>
+        <div id="servicesContainer"></div>
+    </div>
+
+    <div id="updateModal" class="modal" style="display:none;">
+        <form id="updateOrderForm">
+            <input type="hidden" id="orderId" />
+            <select id="status">
+                <option value="IN_PROGRESS">In Progress</option>
+                <option value="COMPLETED">Completed</option>
+                <option value="CANCELLED">Cancelled</option>
+            </select>
+            <input type="date" id="completionDate" />
+            <button type="submit">Update</button>
+        </form>
+    </div>
 </div>
-
-<!-- Tab content for Orders -->
-<div id="Orders" class="tabcontent">
-    <h3>Your Orders</h3>
-    <div id="ordersContainer"></div>
-</div>
-
-<!-- Tab content for Services -->
-<div id="Services" class="tabcontent" style="display:none;">
-    <h3>Available Services</h3>
-    <form id="addServiceForm">
-        <input type="text" id="serviceName" placeholder="Service Name" required>
-        <input type="text" id="serviceDescription" placeholder="Service Description" required>
-        <input type="number" id="serviceCost" step="0.01" placeholder="Service Cost" required>
-        <button type="submit">Add Service</button>
-    </form>
-    <div id="servicesContainer"></div>
-</div>
-
-<div id="updateModal" class="modal" style="display:none;">
-    <form id="updateOrderForm">
-        <input type="hidden" id="orderId" />
-        <select id="status">
-            <option value="IN_PROGRESS">In Progress</option>
-            <option value="COMPLETED">Completed</option>
-            <option value="CANCELLED">Cancelled</option>
-        </select>
-        <input type="date" id="completionDate" />
-        <button type="submit">Update</button>
-    </form>
-</div>
-
 <script src="js/mechanic_dashboard.js"></script>
 </body>
 </html>
